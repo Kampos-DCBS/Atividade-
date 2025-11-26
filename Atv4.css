@@ -6,11 +6,9 @@
         
         body {
             background: linear-gradient(135deg, #8711cb 0%, #c207af 40%, #c26407 100%);
-            background-size: auto;
-            display: flex;
+            margin-top: 5vh;
             justify-content: center;
             align-items: center;
-            flex: auto;
             height: 100vh;
         }
         
@@ -102,9 +100,8 @@
         .forgot-password:hover {
             text-decoration: underline;
         }
-        
         .footer {
             margin-top: 30px;
-            color: #777;
-            font-size: 14px;
+            font-size: 14x;
+            text-align: center;
         }
