@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Cypress</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #8711cb 0%, #c207af 40%, #c26407 100%);
+            background-size: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: auto;
+            height: 100vh;
+        }
+        
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.751);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            text-align: center;
+            margin: auto;
+        }
+        
+        .app-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(-155deg, #8711cb 0%, #c207af 50%, #c26407 100%);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: rgb(255, 255, 255);
+            font-size: 32px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.1);
+        }
+        
+        .btn-submit {
+            background: linear-gradient(-135deg, #8711cb 0%, #c207af 40%, #c26407 100%);
+            color: rgba(255, 255, 255, 0.963);
+            border: none;
+            border-radius: 8px;
+            padding: 14px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(106, 17, 203, 0.3);
+        }
+        
+        .forgot-password {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #6a11cb;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .forgot-password:hover {
+            text-decoration: underline;
+        }
+        
+        .footer {
+            margin-top: 30px;
+            color: #777;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="app-logo" alt="Logo da Aplicação">
+            <span>🔐</span>
+        </div>
+        
+        <h1>Entrar</h1>
+        
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Usuário</label>
+                <input type="text" id="username" placeholder="Usuário ou E-mail" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Digite sua senha" required>
+            </div>
+            
+            <button type="submit" class="btn-submit">Login</button>
+            
+            <a href="/recuperar-senha" class="forgot-password">Esqueceu a senha?</a>
+        </form>
+        
+        <div class="footer">
+            &copy; 2023 Nome da Aplicação. Todos os direitos reservados.
+        </div>
+    </div>
+
+    <script>
+// Define a suíte de testes para a página de login
+describe('Validação da Página de Login', () => {
+
+  // Define a URL base para navegação
+  const LOGIN_URL = '/login' // Altere para a URL real da sua aplicação
+
+  // Hook que é executado antes de cada teste (navegar para a página)
+  beforeEach(() => {
+    cy.visit(LOGIN_URL)
+  })
+
+  // --- Caso de Teste 1: Validação de Conteúdo e Elementos Estáticos ---
+  it('Deve carregar a página corretamente e verificar elementos visuais e estáticos', () => {
+    
+    // 1. Verificação de Título e Favicon (Conteúdo do Head)
+    
+    // Verifica se o título da página está correto (pode variar)
+    cy.title().should('eq', 'Login | Nome da Aplicação') 
+    
+    // Valida o link do favicon (garantindo que o recurso está sendo carregado)
+    cy.get('head link[rel="icon"]').should('have.attr', 'href').and('not.be.empty')
+    
+    // 2. Verificação do Logo ou Imagem Principal
+    
+    // Assume que a logo tem a classe 'app-logo' e verifica se está visível
+    cy.get('.app-logo').should('be.visible')
+    
+    // Verifica se o logo é uma imagem com um atributo 'alt' (boa prática de acessibilidade)
+    cy.get('.app-logo').should('have.attr', 'alt').and('not.be.empty')
+
+    // 3. Verificação do Cabeçalho
+    
+    // Verifica se existe um cabeçalho principal que contém o texto "Entrar" ou similar
+    cy.get('h1').should('be.visible').and('contain', 'Entrar')
+  })
+
+  // --- Caso de Teste 2: Validação de Elementos Interativos (Formulário) ---
+  it('Deve verificar a presença e o estado inicial dos campos do formulário', () => {
+    
+    // 1. Campos de Usuário e Senha
+    
+    // Verifica o campo de usuário (assumindo id='username' ou id='user')
+    cy.get('#username, #user').as('campoUsuario')
+    cy.get('@campoUsuario')
+      .should('be.visible') // Deve estar visível
+      .and('have.attr', 'placeholder', 'Usuário ou E-mail') // Verifica o placeholder
+      .and('have.value', '') // Deve estar vazio inicialmente
+      .and('not.be.disabled') // Não deve estar desabilitado
+
+    // Verifica o campo de senha
+    cy.get('#password').as('campoSenha')
+    cy.get('@campoSenha')
+      .should('be.visible')
+      .and('have.attr', 'type', 'password') // Verifica se o tipo é 'password'
+      .and('have.value', '')
+      
+    // 2. Botão de Submissão
+    
+    cy.get('button[type="submit"]').as('btnSubmit')
+    cy.get('@btnSubmit')
+      .should('be.visible')
+      .and('contain', 'Login') // Verifica o texto do botão
+      .and('not.be.disabled') // O botão deve estar habilitado para uso
+
+    // 3. Link "Esqueceu a Senha"
+    
+    cy.contains('a', 'esqueceu a senha').as('linkRecuperacao')
+    cy.get('@linkRecuperacao')
+      .should('be.visible')
+      .and('have.attr', 'href') // Verifica se é um link com um atributo href
+      .and('not.be.empty')
+  })
+})
+    </script>
+</body>
+</html>
