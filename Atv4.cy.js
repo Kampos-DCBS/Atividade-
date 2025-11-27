@@ -2,7 +2,7 @@
 describe('Validação da Página de Login', () => {
 
   // Define a URL base para navegação
-  const LOGIN_URL = '/login' // Altere para a URL real da sua aplicação
+  const LOGIN_URL = 'http://127.0.0.1:5500/Atv4.html' // Altere para a URL real da sua aplicação
 
   // Hook que é executado antes de cada teste (navegar para a página)
   beforeEach(() => {
